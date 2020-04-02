@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import SearchTree from './SearchTree';
+import SearchTree2 from './SearchTree2';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SearchTree />
   </React.StrictMode>,
   document.getElementById('root')
 );
