@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+// import your fontawesome library
+
+
 import App from './App';
 import SearchTree from './SearchTree';
 import SearchTree2 from './SearchTree2';

@@ -28,6 +28,12 @@
   color: #61dafb;
 }
 
+.pin-icon {
+  padding-right: 1em;
+  cursor: pointer;
+
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

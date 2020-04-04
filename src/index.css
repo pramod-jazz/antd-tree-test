@@ -14,3 +14,8 @@ code {
 .site-tree-search-value {
   color: #f50;
 }
+
+.pin-search{
+  cursor: pointer !important;
+  color: red;
+}
