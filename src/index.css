@@ -19,3 +19,7 @@ code {
   cursor: pointer !important;
   color: red;
 }
+
+.green{
+  background-color: #c8f7c5;
+}
