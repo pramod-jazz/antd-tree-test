@@ -14,95 +14,250 @@ const x = 3;
 const y = 2;
 const z = 1;
 const gData = [];
+let allParents = [];
 let searchedParents = [];
 let childrensWithActivePin = [];
 let selectedTree;
 const treeData = [
-  {
-    title: "Family",
-    key: "Family",
-    icon: <CarryOutOutlined />,
-    children: [
-      {
-        title: "prashant",
-        key: "prashant",
+    {
+        key: 25,
+        
+        title: "SST",
+        "description": "SST Super Market Items",
         icon: <CarryOutOutlined />,
-        parentKey: "Family",
 
-        children: [
-          {
-            title: "pramod",
-            key: "pramod",
-            icon: <CarryOutOutlined />,
-            parentKey: "prashant",
-            children: []
-          },
-          {
-            title: "Tinu",
-            key: "Tinu",
-            icon: <CarryOutOutlined />,
-            parentKey: "prashant",
-            children: [
-              {
-                title: "Sanu",
-                key: "Sanu",
+        subcategories: [
+            {
+                key: 26,
+                title: "Dairy",
+                "description": "Dairy Products",
+                parentKey: 25,
                 icon: <CarryOutOutlined />,
-                parentKey: "Tinu"
-              }
-            ]
-          },
+                subcategories: [
+                    {
+                        key: 27,
+                        title: "Milk",
+                        "description": "Milk Varieties",
+                        parentKey: 26,
+                        subcategories: [],
+                        "itemDtos": [],
+                        "itemStoreAllDto": [
+                            {
+                                key: 1,
+                                "itemId": 1,
+                                title: "Nandini Pasteurised Toned Milk",
+                                "categoryId": 27,
+                                "categoryName": "Milk",
+                                "imgPath": "images/items/Nandini_Pasteurised_Toned_Milk.png",
+                                "isActive": true,
+                                "storeId": 1,
+                                "taxRateId": 0,
+                                "minStock": 20,
+                                parentKey : 27,
+                                "size": 0,
+                                "cancellationNotes": {
+                                    "Subscription": "You can cancel the nextday delivery before 11pm",
+                                    "Order": "You can cancel even one hour after delivery"
+                                },
+                                "qty": {
+                                    "total": "100",
+                                    "expiry_date_today": "25",
+                                    "expiry_date_tomorrow": "75"
+                                },
+                                "physicalAttrs": {
+                                    "length": "10",
+                                    "breadth": "50",
+                                    "weight": "30"
+                                },
+                                "instructions": [
+                                    "Handle with care"
+                                ],
+                                "active": true
+                            },
+                            {
+                                key: 2,
+                                "itemId": 2,
 
-          {
-            title: "nikam",
-            key: "nikam",
-            icon: <CarryOutOutlined />,
-            parentKey: "prashant",
-            children: []
-          }
-        ]
-      },
-
-      {
-        title: "Siddharth",
-        key: "Siddharth",
-        icon: <CarryOutOutlined />,
-        parentKey: "Family",
-        children: [
-          {
-            title: "Sourabh",
-            key: "Sourabh",
-            children: [],
-            icon: <CarryOutOutlined />,
-            parentKey: "Siddharth"
-          },
-          {
-            title: "pravin",
-            key: "pravin",
-            icon: <CarryOutOutlined />,
-            parentKey: "Siddharth",
-            children: []
-          }
-        ]
-      },
-      {
-        title: "Geeta",
-        key: "Geeta",
-        icon: <CarryOutOutlined />,
-        parentKey: "Family",
-        children: [
-          {
-            title: "Shraddha",
-            key: "Shraddha",
-            parentKey: "Geeta",
-            children: []
-          }
-        ]
-      }
-    ]
-  }
+                                title: "Nandini Shubham Pasteurized Standardized Milk",
+                                "categoryId": 27,
+                                "categoryName": "Milk",
+                                "imgPath": "images/items/Nandini_Shubham_Pasteurized_Standardized_Milk.png",
+                                "isActive": true,
+                                "storeId": 1,
+                                parentKey : 27,
+                                "taxRateId": 0,
+                                "minStock": 20,
+                                "size": 0,
+                                "cancellationNotes": {
+                                    "Subscription": "You can cancel the nextday delivery before 11pm",
+                                    "Order": "You can cancel even one hour after delivery"
+                                },
+                                "qty": {
+                                    "total": "100",
+                                    "expiry_date_today": "25",
+                                    "expiry_date_tomorrow": "75"
+                                },
+                                "physicalAttrs": {
+                                    "length": "10",
+                                    "breadth": "50",
+                                    "weight": "30"
+                                },
+                                "instructions": [
+                                    "Handle with care"
+                                ],
+                                "active": true
+                            }
+                        ],
+                        "merchantId": 1,
+                        "mechantId": 1,
+                        "parentId": 26
+                    },
+                    {
+                        key: 28,
+                        title: "Curd",
+                        "description": "Curd Varieties",
+                        parentKey: 26,
+                        subcategories: [],
+                        "itemDtos": [],
+                        "itemStoreAllDto": [
+                            {
+                                key: 3,
+                                "itemId": 3,
+                                title: "Nandini Curd",
+                                parentKey : 28,
+                                "categoryId": 28,
+                                "categoryName": "Curd",
+                                "imgPath": "images/items/Nandini_Curd.png",
+                                "isActive": true,
+                                "storeId": 1,
+                                "taxRateId": 0,
+                                "minStock": 20,
+                                "size": 0,
+                                "cancellationNotes": {
+                                    "Subscription": "You can cancel the nextday delivery before 11pm",
+                                    "Order": "You can cancel even one hour after delivery"
+                                },
+                                "qty": {
+                                    "total": "100",
+                                    "expiry_date_today": "25",
+                                    "expiry_date_tomorrow": "75"
+                                },
+                                "physicalAttrs": {
+                                    "length": "10",
+                                    "breadth": "50",
+                                    "weight": "30"
+                                },
+                                "instructions": [
+                                    "Handle with care"
+                                ],
+                                "active": true
+                            }
+                        ],
+                        "merchantId": 1,
+                        "mechantId": 1,
+                        "parentId": 26
+                    }
+                ],
+                "itemDtos": [],
+                "itemStoreAllDto": [],
+                "merchantId": 1,
+                "mechantId": 1,
+                "parentId": 25
+            },
+            {
+                key: 29,
+                title: "Bakery",
+                "description": "Bakery Products",
+                parentKey: 25,
+                subcategories: [
+                    {
+                        key: 30,
+                        title: "Bread",
+                        "description": "Bread Varieties",
+                        parentKey: 29,
+                        subcategories: [
+                            {
+                                key: 31,
+                                title: "Milk Bread",
+                                "description": "Milk Bread Varieties",
+                                parentKey: 30,
+                                subcategories: [],
+                                "itemDtos": [],
+                                "itemStoreAllDto": [],
+                                "merchantId": 1,
+                                "mechantId": 1,
+                                "parentId": 30
+                            },
+                            {
+                                key: 32,
+                                title: "Wheat Bread",
+                                "description": "Wheat Bread Varieties",
+                                parentKey: 30,
+                                subcategories: [],
+                                "itemDtos": [],
+                                "itemStoreAllDto": [
+                                    {
+                                        key: 4,
+                                        "itemId": 4,
+                                        title: "Britannia 100% Whole Wheat Bread",
+                                        parentKey : 32,
+                                        "categoryId": 32,
+                                        "categoryName": "Wheat Bread",
+                                        "imgPath": "images/items/Britannia_100pct_Whole_Wheat.png",
+                                        "isActive": true,
+                                        "storeId": 1,
+                                        "taxRateId": 0,
+                                        "minStock": 20,
+                                        "size": 0,
+                                        "cancellationNotes": {
+                                            "Subscription": "You can cancel the nextday delivery before 11pm",
+                                            "Order": "You can cancel or return before expiry date"
+                                        },
+                                        "qty": {
+                                            "total": "10",
+                                            "expiry_date_today": "3",
+                                            "expiry_date_tomorrow": "7"
+                                        },
+                                        "physicalAttrs": {
+                                            "length": "10",
+                                            "breadth": "50",
+                                            "weight": "30"
+                                        },
+                                        "instructions": [
+                                            "Handle with care"
+                                        ],
+                                        "active": true
+                                    }
+                                ],
+                                "merchantId": 1,
+                                "mechantId": 1,
+                                "parentId": 30
+                            }
+                        ],
+                        "itemDtos": [],
+                        "itemStoreAllDto": [],
+                        "merchantId": 1,
+                        "mechantId": 1,
+                        "parentId": 29
+                    }
+                ],
+                "itemDtos": [],
+                "itemStoreAllDto": [],
+                "merchantId": 1,
+                "mechantId": 1,
+                "parentId": 25
+            }
+        ],
+        "itemDtos": [],
+        "itemStoreAllDto": [],
+        "merchantId": 1,
+        "mechantId": 1,
+        "parentId": null
+    }
 ];
 
 const generateData = (_level, _preKey, _tns) => {
+    console.log("**** gen data")
   const preKey = _preKey || "0";
   const tns = _tns || gData;
 
@@ -132,22 +287,35 @@ const generateList = (data, prevNode) => {
       ? prevNode.classesApplied + " " + data[i].key
       : data[i].key;
     const node = data[i];
-    const { key, parentKey } = node;
+    const { key, parentKey , title, subcategories} = node;
     dataList.push({
       key,
-      title: key,
+      title: title,
       parentKey: parentKey,
       classesApplied: "lorem"
     });
-    if (node.children) {
-      generateList(node.children, node);
+
+
+
+    if (node.subcategories && node.subcategories.length !== 0 ) {
+        
+      generateList(node.subcategories, node);
+    }else if(node.subcategories && node.itemStoreAllDto && node.itemStoreAllDto.length !== 0) {
+        generateList(node.itemStoreAllDto,node);
+
     }
   }
 };
+console.log("^^^^^^^^^ Listing is happening ^^^^^^^");
 generateList(treeData);
 
+
+console.log(">>>>>> DATA LIST", dataList);
+
 const getExpandsList = (parentKey, list) => {
-  //expands.push(1);
+
+  console.log(">>>>>> GET EXPANDS LIST CALLED")  
+//getExpandsList.push();
   for (let i = 0; i < list.length; i++) {
     if (list[i].key && list[i].key === parentKey) {
       searchedParents.push(list[i].key);
@@ -159,40 +327,24 @@ const getExpandsList = (parentKey, list) => {
   }
 };
 
-const setDefaultExpandsToLocalStorage = (key, list) => {
-  console.log(">>>> Setting up default expand!");
-  //expands.push(1);
-  let defaultExpands = localStorage.getItem("defaultExpands");
 
-  if (defaultExpands) {
-    let previousDefaultExpands = JSON.parse(defaultExpands);
-    previousDefaultExpands.push(key);
-    localStorage.setItem(
-      "defaultExpands",
-      JSON.stringify(previousDefaultExpands)
-    );
-  } else {
-    let tempKeys = [];
-    tempKeys.push(key);
-    localStorage.setItem("defaultExpands", JSON.stringify(tempKeys));
-  }
+const getParentsByKeyList = (parentKey, list) => {
 
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].key && list[i].key === key) {
-      searchedParents.push(list[i].key);
-
-      if (list[i].children) {
-        console.log(">>> In recusrsion");
-        for (let j = 0; j < list[i].children.length; j++) {
-          console.log(">>> In each children", list[i]);
-          getExpandsList(list[i].children[j].key, list);
+    console.log(">>>>>> GET EXPANDS LIST CALLED")  
+  //getExpandsList.push();
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].key && list[i].key === parentKey) {
+        allParents.push(list[i].key);
+  
+        if (list[i].parentKey ) {
+            getParentsByKeyList(list[i].parentKey, list);
         }
-      } else {
-        console.log(">>> In else");
       }
     }
-  }
-};
+  };
+  
+
+
 
 const selectTreeNode = (key, tree) => {
    console.log(">>> Inside tree node cuntion") ;
@@ -204,11 +356,24 @@ const selectTreeNode = (key, tree) => {
     selectedTree = tree;
   } else {
   
-        if (tree.children && tree.children.length !== 0) 
+        if (tree.subcategories && tree.subcategories.length !== 0) 
          {
             console.log("Tree has childre");
 
-            tree.children.map( childItem => {
+            tree.subcategories.map( childItem => {
+               console.log("%%%% each children", childItem); 
+            if (childItem.key === key) {
+              selectedTree = childItem;
+            } else {
+              console.log(">>> In each children", childItem);
+              selectTreeNode(key, childItem);
+            }
+          });
+         }
+         else if(tree.subcategories && tree.itemStoreAllDto && tree.itemStoreAllDto.length !== 0){
+            console.log("Tree item dto childre");
+
+            tree.itemStoreAllDto.map( childItem => {
                console.log("%%%% each children", childItem); 
             if (childItem.key === key) {
               selectedTree = childItem;
@@ -223,8 +388,7 @@ const selectTreeNode = (key, tree) => {
 };
 
 const setDefaultExpandsByIteratingTree = (key, tree) => {
-  console.log("**** in default expands >> key is :", key);
-  console.log("**** in default expands >> tree is :", tree);
+ 
 
   let allGreenStrings = localStorage.getItem("allGreens");
 
@@ -238,36 +402,45 @@ const setDefaultExpandsByIteratingTree = (key, tree) => {
     localStorage.setItem("allGreens", JSON.stringify(tempKeys));
   }
 
-  console.log("***** child length : ", tree.children);
+  console.log("*** What happened to tree", tree);
 
-  if (tree.children) {
-    $.each(tree.children, function(index, childItem) {
-      console.log(">>> In each children", childItem);
+  if (tree.subcategories && tree.subcategories.length !== 0 ) {
+    $.each(tree.subcategories, function(index, childItem) {
+      
       setDefaultExpandsByIteratingTree(childItem.key, childItem);
     });
+  }else if(tree.subcategories &&  tree.itemStoreAllDto &&  tree.itemStoreAllDto.length !== 0 ){
+
+    $.each(tree.itemStoreAllDto, function(index, childItem) {
+      
+        setDefaultExpandsByIteratingTree(childItem.key, childItem);
+      });
   }
 };
 
 const getAllPinnedChildren = (key, tree, currentKey) => {
-  console.log("**** getAll pinned cheldren >> key is :", key);
-  console.log("**** getAll pinned cheldren >> tree is :", tree);
+
   if (key !== currentKey) {
     if ($("#" + key).hasClass("pin-search")) {
       childrensWithActivePin.push(key);
     }
   }
 
-  if (tree.children) {
-    $.each(tree.children, function(index, childItem) {
-      console.log(">>> In each children", childItem);
+  if (tree.subcategories && tree.subcategories.length !== 0 ) {
+    $.each(tree.subcategories, function(index, childItem) {
+    
       getAllPinnedChildren(childItem.key, childItem, currentKey);
     });
-  }
+  } else if (tree.subcategories && tree.itemStoreAllDto && tree.itemStoreAllDto.length !== 0 ) {
+    $.each(tree.itemStoreAllDto, function(index, childItem) {
+    
+        getAllPinnedChildren(childItem.key, childItem, currentKey);
+      });
+}
 };
 
 const removeAllGreens = (key, tree) => {
-  console.log("**** in remove greens >> key is :", key);
-  console.log("**** in remove greens >> tree is :", tree);
+ 
 
   let allGreenStrings = localStorage.getItem("allGreens");
 
@@ -281,14 +454,18 @@ const removeAllGreens = (key, tree) => {
 
   //expands.push(1);
 
-  console.log("***** child length : ", tree.children);
 
-  if (tree.children) {
-    $.each(tree.children, function(index, childItem) {
-      console.log(">>> In each children", childItem);
+
+  if (tree.subcategories && tree.subcategories.length !== 0) {
+    $.each(tree.subcategories, function(index, childItem) {
+ 
       removeAllGreens(childItem.key, childItem);
     });
-  }
+  } else if(tree.subcategories && tree.itemStoreAllDto &&  tree.itemStoreAllDto.length !== 0) {
+    $.each(tree.itemStoreAllDto, function(index, childItem) {
+    removeAllGreens(childItem.key, childItem);
+    });
+  };
 };
 
 class SearchTree extends React.Component {
@@ -301,6 +478,8 @@ class SearchTree extends React.Component {
 
   onExpand = expandedKeys => {
     console.log(">>> on expand");
+    //expandedKeys.push(27);
+   // expandedKeys.push(26);
     this.setState({
       expandedKeys,
       autoExpandParent: true
@@ -309,7 +488,13 @@ class SearchTree extends React.Component {
 
   retrieveNodes = searchKeyword => {
     return dataList.filter(
-      item => item && item.key.indexOf(searchKeyword) !== -1
+      item => item && item.title.indexOf(searchKeyword) !== -1
+    );
+  };
+
+  retrieveNodesByKey = key => {
+    return dataList.filter(
+      item => item && item.key === key
     );
   };
 
@@ -318,8 +503,6 @@ class SearchTree extends React.Component {
 
     // Getting back list of matched nodes by keyword in Search
     this.getAllParents(value);
-
-    console.log("list of matched expanded keys by query", searchedParents);
 
     this.setState(
       {
@@ -341,25 +524,9 @@ class SearchTree extends React.Component {
     // });
   };
 
-  OnNodeLoad = nodeId => {
-    // alert("Node");
-    console.log(">>>> Node loaded :", nodeId);
-    //   let defaultExpandsString = localStorage.getItem("defaultExpands");
+  
 
-    //   if(defaultExpandsString){
-    //     let defaultExpands = JSON.parse(defaultExpandsString);
 
-    //     console.log(">>> In On Node Load : default expands : " , defaultExpands);
-
-    //     defaultExpands.forEach((item, index, arr) => {
-
-    //         console.log(">>> In On Node Load : each item : " , item);
-
-    //           $("#"+ item).addClass("pin-search");
-
-    //   });
-    // }
-  };
 
   OnPinClick = (event, targetKey, parentKey) => {
     console.log(">>> inside pin");
@@ -390,27 +557,27 @@ class SearchTree extends React.Component {
 
       // remove Greens logic
 
-      this.getAllParents(parentKey);
+      allParents = [];
+      this.getAllParentsByKey(parentKey);
 
       let anyParentGreen = false;
 
-      if (searchedParents && searchedParents.length !== 0) {
-        searchedParents.forEach(item => {
+      console.log("****** SEARCHED PARENTS ARE :" , allParents);
+
+      if (allParents && allParents.length !== 0) {
+        allParents.forEach(item => {
           if ($("#" + item).hasClass("pin-search")) {
             anyParentGreen = true;
           }
         });
       }
 
-      searchedParents = [];
+      allParents = [];
 
       if (!anyParentGreen) {
-        console.log("**** No Parent Green!");
-        //removeDefaultExpandsToLocalStorage(targetKey,dataList);
         let rootData =[...this.state.treeData];
         selectTreeNode(targetKey, rootData[0]);
 
-        console.log("********* SELECTED TREE :", selectedTree);
         removeAllGreens(targetKey, selectedTree);
       }
 
@@ -421,41 +588,39 @@ class SearchTree extends React.Component {
       childrensWithActivePin = [];
       getAllPinnedChildren(targetKey, selectedTree, targetKey);
 
-      console.log("**** ACTIVe pin list: ", childrensWithActivePin);
-
       childrensWithActivePin.forEach(item => {
-        console.log("**** Iterating active pin", item);
+ 
         selectedTree = null;
         let rootData = [...this.state.treeData];
         selectTreeNode(item, rootData[0]);
 
-        console.log("********* SELECTED TREE :", selectedTree);
+  
 
         setDefaultExpandsByIteratingTree(item, selectedTree);
       });
 
       // remove default expands 
-      
+
 
       this.setState(
         {
           changed: true
         },
         () => {
-          console.log("*** Set state is happening!");
+     
         }
       );
 
       //
     } else {
-      console.log(">>>> Inside don't have  class");
+ 
 
       selectedTree = null;
       let rootData = [...this.state.treeData];
       selectTreeNode(targetKey, rootData[0]);
 
-      console.log("********* SELECTED TREE :", selectedTree);
 
+      console.log(">>> Selected tree is ", selectedTree);
       setDefaultExpandsByIteratingTree(targetKey, selectedTree);
       let defaultExpands = localStorage.getItem("defaultExpands");
       let pinnedItems = localStorage.getItem("pinnedItems");
@@ -510,8 +675,8 @@ class SearchTree extends React.Component {
         if (item.key === key) {
           return callback(item, index, arr);
         }
-        if (item.children) {
-          return loop(item.children, key, callback);
+        if (item.subcategories) {
+          return loop(item.subcategories, key, callback);
         }
       });
     };
@@ -528,19 +693,19 @@ class SearchTree extends React.Component {
     if (!info.dropToGap) {
       // Drop on the content
       loop(data, dropKey, item => {
-        item.children = item.children || [];
+        item.subcategories = item.subcategories || [];
         // where to insert 示例添加到尾部，可以是随意位置
-        item.children.push(dragObj);
+        item.subcategories.push(dragObj);
       });
     } else if (
-      (info.node.props.children || []).length > 0 && // Has children
+      (info.node.props.subcategories || []).length > 0 && // Has children
       info.node.props.expanded && // Is expanded
       dropPosition === 1 // On the bottom gap
     ) {
       loop(data, dropKey, item => {
-        item.children = item.children || [];
+        item.subcategories = item.subcategories || [];
         // where to insert 示例添加到头部，可以是随意位置
-        item.children.unshift(dragObj);
+        item.subcategories.unshift(dragObj);
       });
     } else {
       let ar;
@@ -569,66 +734,31 @@ class SearchTree extends React.Component {
     });
   }
 
-  //   componentDidUpdate(){
 
-  //       console.log(">>> In component did update");
+  getAllParentsByKey(key) {
+    const keyTargets = this.retrieveNodesByKey(key);
+    searchedParents = [];
+    keyTargets.map(item => {
+      getParentsByKeyList(item.key, dataList);
+    });
+  }
 
-  //       let pinnedItemsString = localStorage.getItem("pinnedItems");
-
-  //       if(pinnedItemsString){
-  //         let pinnedItems = JSON.parse(pinnedItemsString);
-
-  //         console.log(">>> In component did update : pinned items : " , pinnedItems);
-
-  //        pinnedItems.forEach((item) => {
-
-  //             console.log(">>> In component did update : each item : " , item);
-
-  //             $("#"+ item).addClass("pin-search");
-  //             $("."+ item).each(function( index, value ) {
-
-  //                 $(this).addClass("green");
-  //       });
-
-  //       });
-  //     }
-
-  //   }
-
-  //   componentDidMount(){
-  //     console.log(">>> In component did mount");
-
-  //     let defaultExpandsString = localStorage.getItem("defaultExpands");
-
-  //     if(defaultExpandsString){
-  //       let defaultExpands = JSON.parse(defaultExpandsString);
-
-  //       defaultExpands.forEach((item, index, arr) => {
-  //           console.log(">>> Iterating every default expand");
-
-  //              $("."+ item).each(function( index, value ) {
-  //       console.log( index + ": " + value );
-  //       $(this).addClass("pin-search");
-  //     });
-
-  //     });
-  //   }
-
-  // }
+ 
 
   render() {
+
     let allGreensString = localStorage.getItem("allGreens");
     let greens = [];
     if (allGreensString) {
       greens = JSON.parse(allGreensString);
-      console.log(">>>>> all greens", greens);
+
     }
 
     let pinnedItemsString = localStorage.getItem("pinnedItems");
     let pinnedItems = [];
     if (pinnedItemsString) {
       pinnedItems = JSON.parse(pinnedItemsString);
-      console.log(">>>>> all pinnedItems", pinnedItems);
+ 
     }
 
     let defaultExpandsString = localStorage.getItem("defaultExpands");
@@ -700,13 +830,21 @@ class SearchTree extends React.Component {
               </span>
             </span>
           );
-        if (item.children) {
+        if (item.subcategories && item.subcategories.length !== 0
+            ) {
           return {
             title,
             key: item.key,
             parentKey: item.parentKey,
-            children: loop(item.children)
+            children: loop(item.subcategories)
           };
+        } else if(item.subcategories &&  item.itemStoreAllDto && item.itemStoreAllDto.length !== 0){
+            return{
+                title,
+                key: item.key,
+                parentKey: item.parentKey,
+                children: loop(item.itemStoreAllDto)
+            }
         }
 
         return {
@@ -719,8 +857,12 @@ class SearchTree extends React.Component {
 
     let expands = [...this.state.expandedKeys];
     let allExpands = expands.concat(defaultExpands);
+    //le
 
-    console.log(">>>> All expands", allExpands);
+   //let allExpands = expands;
+
+   // console.log(">>>> All expands", allExpands);
+    console.log(">>>>> tree data inside render: ", this.state.treeData);
 
     return (
       <div>
@@ -733,7 +875,8 @@ class SearchTree extends React.Component {
           className="draggable-tree"
           onExpand={this.onExpand}
           expandedKeys={allExpands}
-          autoExpandParent={this.state.autoExpandParent}
+          defaultExpandedKeys={allExpands}
+          autoExpandParent={this.autoExpandParent}
           treeData={loop(this.state.treeData)}
           draggable
           blockNode
@@ -742,9 +885,10 @@ class SearchTree extends React.Component {
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
         />
-      </div>
+      </div>    
     );
   }
+  
 }
 
 export default SearchTree;
