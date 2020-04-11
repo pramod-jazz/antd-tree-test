@@ -442,10 +442,39 @@ class SearchTree extends React.Component {
   };
 
   onExpand = (expandedKeys) => {
+    console.log(">>> Expanding");
+    if(this.state.searchOn && this.state.searchOn === true  ){
+
+      // let value = this.state.searchValue;
+
+      // if (value.length > 3 || value === "") {
+      //   // Getting back list of matched nodes by keyword in Search
+      //   searchedParents = [];
+      //   this.getMatchingNode(value);
+      //   this.getAllParents(value);
+  
+      //   console.log(">>>> MATCHING NODES: ", searchedParents);
+  
+      //   this.setState(
+      //     {
+      //       expandedKeys: searchedParents,
+      //       searchValue: value,
+      //       autoExpandParent: true,
+      //       searchOn: true,
+      //     },
+      //     () => {
+      //       searchedParents = [];
+      //     }
+      //   );
+      // }
+
+
+    }else{
     this.setState({
       expandedKeys,
       autoExpandParent: true,
     });
+  }
   };
 
   retrieveNodes = (searchKeyword) => {
@@ -553,6 +582,43 @@ class SearchTree extends React.Component {
       });
 
       // remove default expands
+
+      allParents = [];
+      this.getAllParentsByKey(parentKey);
+
+      console.log("****** SEARCHED PARENTS ARE :", allParents);
+
+      let defaultExpands = localStorage.getItem("defaultExpands");
+
+      if (defaultExpands) {
+        let previousDefaultExpands = JSON.parse(defaultExpands);
+        previousDefaultExpands.pop(targetKey);
+        var newRemovedExpands ;
+        allParents.map((item) => {
+          previousDefaultExpands.pop(item);
+        });
+
+        console.log("****** WHAT ARE REMOVED EXPANDS :", previousDefaultExpands);
+
+        localStorage.setItem(
+          "defaultExpands",
+          JSON.stringify(previousDefaultExpands)
+        );
+      }
+      //  else {
+      //   let tempKeys = [];
+      //   tempKeys.push(targetKey);
+
+      //   allParents.map((item) => {
+      //     tempKeys.push(item);
+      //   });
+
+      //   allParents = [];
+
+      //   //tempKeys.push(parentKey);
+      //   localStorage.setItem("defaultExpands", JSON.stringify(tempKeys));
+      // }
+
 
       this.setState(
         {
@@ -674,6 +740,7 @@ class SearchTree extends React.Component {
       console.log(">>>>>>>>> WHAT IS INDEX ", index);
       console.log(">>>>>>>>> WHAT IS ITEM ", item);
       arr.splice(index, 1);
+      console.log(">>>>>>>>> WHAT IS ARRAY AFTER SPLICING ", arr);
       dragObj = item;
     });
 
@@ -738,6 +805,10 @@ class SearchTree extends React.Component {
     }
 
     console.log("^^^^^^^^^^ Tree Data after Drop : ", treeData);
+
+      dataList =[];
+    generateList(treeData);
+    console.log(">>>>>> DATA LIST AGAIN", dataList);
 
     this.setState({
       treeData: data,
