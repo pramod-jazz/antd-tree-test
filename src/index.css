@@ -20,6 +20,10 @@ code {
   color: red;
 }
 
-.green{
+/* .green{
   background-color: #c8f7c5;
+} */
+
+.hide-span {
+  display: none;
 }
