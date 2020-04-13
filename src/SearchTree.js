@@ -583,28 +583,7 @@ class SearchTree extends React.Component {
 
       // remove default expands
 
-      allParents = [];
-      this.getAllParentsByKey(parentKey);
-
-      console.log("****** SEARCHED PARENTS ARE :", allParents);
-
-      let defaultExpands = localStorage.getItem("defaultExpands");
-
-      if (defaultExpands) {
-        let previousDefaultExpands = JSON.parse(defaultExpands);
-        previousDefaultExpands.pop(targetKey);
-        var newRemovedExpands ;
-        allParents.map((item) => {
-          previousDefaultExpands.pop(item);
-        });
-
-        console.log("****** WHAT ARE REMOVED EXPANDS :", previousDefaultExpands);
-
-        localStorage.setItem(
-          "defaultExpands",
-          JSON.stringify(previousDefaultExpands)
-        );
-      }
+      this.removeDefaultExpands(parentKey, targetKey);
       //  else {
       //   let tempKeys = [];
       //   tempKeys.push(targetKey);
@@ -640,34 +619,13 @@ class SearchTree extends React.Component {
 
       console.log(">>> Selected tree is ", selectedTree);
       setDefaultExpandsByIteratingTree(targetKey, selectedTree);
-      let defaultExpands = localStorage.getItem("defaultExpands");
+
+     
+
+      this.addDefaultExpands(targetKey);
+
+
       let pinnedItems = localStorage.getItem("pinnedItems");
-
-      if (defaultExpands) {
-        let previousDefaultExpands = JSON.parse(defaultExpands);
-        previousDefaultExpands.push(targetKey);
-        allParents.map((item) => {
-          previousDefaultExpands.push(item);
-        });
-
-        localStorage.setItem(
-          "defaultExpands",
-          JSON.stringify(previousDefaultExpands)
-        );
-      } else {
-        let tempKeys = [];
-        tempKeys.push(targetKey);
-
-        allParents.map((item) => {
-          tempKeys.push(item);
-        });
-
-        allParents = [];
-
-        //tempKeys.push(parentKey);
-        localStorage.setItem("defaultExpands", JSON.stringify(tempKeys));
-      }
-
       if (pinnedItems) {
         let previousPinnedItems = JSON.parse(pinnedItems);
         previousPinnedItems.push(targetKey);
@@ -746,16 +704,31 @@ class SearchTree extends React.Component {
 
     console.log("$$$$$ Drag Object $$$$", dragObj);
 
+
+
     if (!info.dropToGap) {
       // Drop on the content
       loop(data, dropKey, (item) => {
         console.log("**** DROP OBJECT : ", info.node.key);
         console.log("**** WHAT IS DROP ITEM : ", item);
+
+       
+
         console.log("**** WHAT IS DRAG ITEM : ", dragObj);
         if (dragObj.isLeaf && dragObj.isLeaf === true) {
           item.itemStoreAllDto = item.itemStoreAllDto || [];
           dragObj.parentKey = item.key;
           item.itemStoreAllDto.push(dragObj);
+
+          selectedTree = null;
+       
+          selectTreeNode(item.parentKey, data[0]);
+          selectedTree.itemStoreAllDto.pop(dragObj);
+
+          loop(data, item.parentKey, (innerItem) => {
+               console.log("******* INNER ITEM IS ",  innerItem);
+          });
+
           console.log(
             "********* Inserting into item DTO ",
             item.itemStoreAllDto
@@ -767,10 +740,28 @@ class SearchTree extends React.Component {
           item.subcategories = item.subcategories || [];
           dragObj.parentKey = item.key;
           item.itemStoreAllDto.push(dragObj);
+
+          selectedTree = null;
+       
+          selectTreeNode(item.parentKey, data[0]);
+          selectedTree.subcategories.pop(dragObj);
+
+          loop(data, item.parentKey, (innerItem) => {
+               console.log("******* INNER ITEM IS ",  innerItem);
+          });
+
           console.log(
             "********* Inserting into subcategory ",
             item.subcategories
           );
+        }
+
+        console.log(">>>> BEFORE PIN CHECK", dragObj);
+        if($("#" + dragObj.key ).hasClass("pin-search")){
+
+          console.log(">>>> INSIDE PIN SEARCH DEAFAULT EXPAND ADD ? REMOVE", dragObj);
+          this.removeDefaultExpands(dragObj.parentKey,dragObj.key);
+          this.addDefaultExpands(dragObj.key);
         }
 
         console.log("Something after drop");
@@ -814,6 +805,45 @@ class SearchTree extends React.Component {
       treeData: data,
     });
   };
+
+  addDefaultExpands(targetKey) {
+    let defaultExpands = localStorage.getItem("defaultExpands");
+    if (defaultExpands) {
+      let previousDefaultExpands = JSON.parse(defaultExpands);
+      previousDefaultExpands.push(targetKey);
+      allParents.map((item) => {
+        previousDefaultExpands.push(item);
+      });
+      localStorage.setItem("defaultExpands", JSON.stringify(previousDefaultExpands));
+    }
+    else {
+      let tempKeys = [];
+      tempKeys.push(targetKey);
+      allParents.map((item) => {
+        tempKeys.push(item);
+      });
+      allParents = [];
+      //tempKeys.push(parentKey);
+      localStorage.setItem("defaultExpands", JSON.stringify(tempKeys));
+    }
+  }
+
+  removeDefaultExpands(parentKey, targetKey) {
+    allParents = [];
+    this.getAllParentsByKey(parentKey);
+    console.log("****** SEARCHED PARENTS ARE :", allParents);
+    let defaultExpands = localStorage.getItem("defaultExpands");
+    if (defaultExpands) {
+      let previousDefaultExpands = JSON.parse(defaultExpands);
+      previousDefaultExpands.pop(targetKey);
+      var newRemovedExpands;
+      allParents.map((item) => {
+        previousDefaultExpands.pop(item);
+      });
+      console.log("****** WHAT ARE REMOVED EXPANDS :", previousDefaultExpands);
+      localStorage.setItem("defaultExpands", JSON.stringify(previousDefaultExpands));
+    }
+  }
 
   getAllParents(value) {
     const searchTargets = this.retrieveNodes(value);
@@ -878,11 +908,10 @@ class SearchTree extends React.Component {
     } = this.state;
     let expandedKeysClubbed = expandedKeys.concat(defaultExpands);
 
-    console.log(">>> TREE IN RENDER ", this.state.treeData);
-    console.log(">>> expanded keys in render ", expandedKeysClubbed);
+
     const loop = (data) =>
       data.map((item) => {
-        console.log(" $$$$$$ each item ", item);
+       
 
         const index = item.title.indexOf(searchValue);
         const beforeStr = item.title.substr(0, index);
@@ -951,14 +980,14 @@ class SearchTree extends React.Component {
         ) {
           $("#" + item.key)
             .parentsUntil(".ant-tree-list-holder-inner")
-          //  .hide();
-            .css( "background-color", "red" );
-          //  .css( "display", "none" );
+            .hide();
+          //  .css( "background-color", "red" );
+            //.css( "display", "none" );
         } else {
           $("#" + item.key)
             .parentsUntil(".ant-tree-list-holder-inner")
-         //   .show();
-             .css( "background-color", "white" );
+            .show();
+         //    .css( "background-color", "white" );
         }
 
         let multiFolder = [];
@@ -968,10 +997,7 @@ class SearchTree extends React.Component {
           item.itemStoreAllDto &&
           item.itemStoreAllDto.length !== 0
         ) {
-          console.log(
-            "^^^^^^^^ In both itemsDTO and subcategories  return ",
-            item
-          );
+      
           let childs = item.itemStoreAllDto;
           childs =     childs.concat(item.subcategories);
 
@@ -988,7 +1014,7 @@ class SearchTree extends React.Component {
         }
 
         if (item.subcategories && item.subcategories.length !== 0) {
-          console.log("^^^^^^^^ In only subcategory return ", item);
+       
           return {
             title,
             key: item.key,
@@ -998,7 +1024,7 @@ class SearchTree extends React.Component {
         }
 
         if (item.itemStoreAllDto && item.itemStoreAllDto.length !== 0) {
-          console.log("^^^^^^^^ In only itemdto return ", item);
+         
           return {
             title,
             key: item.key,
@@ -1007,7 +1033,7 @@ class SearchTree extends React.Component {
           };
         }
 
-        console.log("^^^^^^^^ LAST RESORT ", item);
+
 
         return {
           title,
@@ -1020,12 +1046,7 @@ class SearchTree extends React.Component {
 
     let expands = [...this.state.expandedKeys];
     let allExpands = expands.concat(defaultExpands);
-    //le
 
-    //let allExpands = expands;
-
-    // console.log(">>>> All expands", allExpands);
-    console.log(">>>>> tree data inside render: ", this.state.treeData);
 
     return (
       <div>
