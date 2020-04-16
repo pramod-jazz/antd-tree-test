@@ -309,8 +309,6 @@ const generateList = (data, prevNode) => {
 
 generateList(treeData);
 
-console.log(">>>>>> DATA LIST", dataList);
-
 const getExpandsList = (parentKey, list) => {
   //getExpandsList.push();
   for (let i = 0; i < list.length; i++) {
@@ -442,19 +440,14 @@ class SearchTree extends React.Component {
   };
 
   onExpand = (expandedKeys) => {
-    console.log(">>> Expanding");
-    if(this.state.searchOn && this.state.searchOn === true  ){
-
+    if (this.state.searchOn && this.state.searchOn === true) {
       // let value = this.state.searchValue;
-
       // if (value.length > 3 || value === "") {
       //   // Getting back list of matched nodes by keyword in Search
       //   searchedParents = [];
       //   this.getMatchingNode(value);
       //   this.getAllParents(value);
-  
       //   console.log(">>>> MATCHING NODES: ", searchedParents);
-  
       //   this.setState(
       //     {
       //       expandedKeys: searchedParents,
@@ -467,14 +460,12 @@ class SearchTree extends React.Component {
       //     }
       //   );
       // }
-
-
-    }else{
-    this.setState({
-      expandedKeys,
-      autoExpandParent: true,
-    });
-  }
+    } else {
+      this.setState({
+        expandedKeys,
+        autoExpandParent: true,
+      });
+    }
   };
 
   retrieveNodes = (searchKeyword) => {
@@ -495,8 +486,6 @@ class SearchTree extends React.Component {
       searchedParents = [];
       this.getMatchingNode(value);
       this.getAllParents(value);
-
-      console.log(">>>> MATCHING NODES: ", searchedParents);
 
       this.setState(
         {
@@ -526,8 +515,6 @@ class SearchTree extends React.Component {
     let clickedNodeKey = targetKey;
 
     if ($("#" + clickedNodeKey).hasClass("pin-search")) {
-      console.log(">>>> Inside has class");
-
       // lets unpin item
       let pinnedItems = localStorage.getItem("pinnedItems");
 
@@ -546,8 +533,6 @@ class SearchTree extends React.Component {
       this.getAllParentsByKey(parentKey);
 
       let anyParentGreen = false;
-
-      console.log("****** SEARCHED PARENTS ARE :", allParents);
 
       if (allParents && allParents.length !== 0) {
         allParents.forEach((item) => {
@@ -598,7 +583,6 @@ class SearchTree extends React.Component {
       //   localStorage.setItem("defaultExpands", JSON.stringify(tempKeys));
       // }
 
-
       this.setState(
         {
           changed: true,
@@ -615,15 +599,9 @@ class SearchTree extends React.Component {
       allParents = [];
       this.getAllParentsByKey(parentKey);
 
-      console.log("****** SEARCHED PARENTS ARE :", allParents);
-
-      console.log(">>> Selected tree is ", selectedTree);
       setDefaultExpandsByIteratingTree(targetKey, selectedTree);
 
-     
-
       this.addDefaultExpands(targetKey);
-
 
       let pinnedItems = localStorage.getItem("pinnedItems");
       if (pinnedItems) {
@@ -643,9 +621,7 @@ class SearchTree extends React.Component {
         {
           changed: true,
         },
-        () => {
-          console.log("*** Set state is happening!");
-        }
+        () => {}
       );
     }
   };
@@ -655,6 +631,11 @@ class SearchTree extends React.Component {
 
     if (info.node.isLeaf && info.node.isLeaf == true) {
       alert("You cannot drop at leaf level!");
+      return false;
+    }
+
+    if (info.dropToGap) {
+      alert("Please drop properly on category!");
       return false;
     }
 
@@ -670,8 +651,13 @@ class SearchTree extends React.Component {
         if (item.key === key) {
           return callback(item, index, arr);
         }
-        if (item.itemStoreAllDto && item.itemStoreAllDto.length !== 0 && item.subcategories && item.subcategories.length !== 0 ) {
-          let childs  = item.subcategories;
+        if (
+          item.itemStoreAllDto &&
+          item.itemStoreAllDto.length !== 0 &&
+          item.subcategories &&
+          item.subcategories.length !== 0
+        ) {
+          let childs = item.subcategories;
           childs = childs.concat(item.itemStoreAllDto);
           return loop(childs, key, callback);
         }
@@ -682,15 +668,14 @@ class SearchTree extends React.Component {
         if (item.subcategories && item.subcategories.length !== 0) {
           return loop(item.subcategories, key, callback);
         }
-       
       });
     };
     const data = [...this.state.treeData];
     //const data = treeData;
 
     // Find dragObject
-    console.log("^^^^^ WHAT HAPPENED TO DRAG OBJECT DATA ^^^^^^ ",data);
-    console.log("^^^^^ WHAT HAPPENED TO DRAG KEY ^^^^^^ ",dragKey);
+    console.log("^^^^^ WHAT HAPPENED TO DRAG OBJECT DATA ^^^^^^ ", data);
+    console.log("^^^^^ WHAT HAPPENED TO DRAG KEY ^^^^^^ ", dragKey);
     let dragObj;
     loop(data, dragKey, (item, index, arr) => {
       console.log(">>>>>>>>> WHAT IS DRAG KEY ", dragKey);
@@ -704,50 +689,68 @@ class SearchTree extends React.Component {
 
     console.log("$$$$$ Drag Object $$$$", dragObj);
 
-
-
     if (!info.dropToGap) {
       // Drop on the content
       loop(data, dropKey, (item) => {
         console.log("**** DROP OBJECT : ", info.node.key);
         console.log("**** WHAT IS DROP ITEM : ", item);
 
-       
-
         console.log("**** WHAT IS DRAG ITEM : ", dragObj);
         if (dragObj.isLeaf && dragObj.isLeaf === true) {
+
+
           item.itemStoreAllDto = item.itemStoreAllDto || [];
+
+
+          selectTreeNode(dragObj.parentKey, data[0]);
+          console.log("********* Selected Tree after drop : ", selectedTree);
+         // selectedTree.itemStoreAllDto.pop(dragObj);
+         let tempItems = selectedTree.itemStoreAllDto; 
+
+         for( var i = 0; i < tempItems.length; i++){ if ( tempItems[i].key === dragObj.key) { tempItems.splice(i, 1); i--; }}
+
+         selectedTree.itemStoreAllDto = tempItems;
+
+         console.log("********* Selected Tree after value deletion : ", selectedTree);
+
           dragObj.parentKey = item.key;
           item.itemStoreAllDto.push(dragObj);
 
           selectedTree = null;
-       
-          selectTreeNode(item.parentKey, data[0]);
-          selectedTree.itemStoreAllDto.pop(dragObj);
+
+          
 
           loop(data, item.parentKey, (innerItem) => {
-               console.log("******* INNER ITEM IS ",  innerItem);
+            console.log("******* INNER ITEM IS ", innerItem);
           });
 
           console.log(
             "********* Inserting into item DTO ",
             item.itemStoreAllDto
           );
-
-
-         
         } else {
+          console.log(
+            "********* You are in subcategories Dropped destination : ",
+            item
+          );
+          console.log(
+            "********* You are in subcategories Dragged , item : ",
+            dragObj
+          );
+
           item.subcategories = item.subcategories || [];
           dragObj.parentKey = item.key;
-          item.itemStoreAllDto.push(dragObj);
+          item.subcategories.push(dragObj);
 
           selectedTree = null;
-       
+
           selectTreeNode(item.parentKey, data[0]);
-          selectedTree.subcategories.pop(dragObj);
+          //selectedTree.subcategories.pop(dragObj);
+
+          console.log("********* Selected Tree after drop : ", selectedTree);
 
           loop(data, item.parentKey, (innerItem) => {
-               console.log("******* INNER ITEM IS ",  innerItem);
+            console.log("******* INNER ITEM IS ", innerItem);
           });
 
           console.log(
@@ -757,47 +760,60 @@ class SearchTree extends React.Component {
         }
 
         console.log(">>>> BEFORE PIN CHECK", dragObj);
-        if($("#" + dragObj.key ).hasClass("pin-search")){
-
-          console.log(">>>> INSIDE PIN SEARCH DEAFAULT EXPAND ADD ? REMOVE", dragObj);
-          this.removeDefaultExpands(dragObj.parentKey,dragObj.key);
+        if ($("#" + dragObj.key).hasClass("pin-search")) {
+          console.log(
+            ">>>> INSIDE PIN SEARCH DEAFAULT EXPAND ADD ? REMOVE",
+            dragObj
+          );
+          this.removeDefaultExpands(dragObj.parentKey, dragObj.key);
           this.addDefaultExpands(dragObj.key);
         }
 
         console.log("Something after drop");
         // where to insert 示例添加到尾部，可以是随意位置
       });
-    } else if (
-      (info.node.props.subcategories || []).length > 0 && // Has children
-      info.node.props.expanded && // Is expanded
-      dropPosition === 1 // On the bottom gap
-    ) {
-      alert(">>>>>>>>>> In else if has childed");
 
-      // loop(data, dropKey, (item) => {
-      //   item.subcategories = item.subcategories || [];
-      //   // where to insert 示例添加到头部，可以是随意位置
-      //   item.subcategories.unshift(dragObj);
-      // });
-    } else {
-      alert(">>>>>>>>>> In only else");
+      console.log("^^^^^^^^^^ Tree Data after Drop : ", treeData);
 
-      // let ar;
-      // let i;
-      // loop(data, dropKey, (item, index, arr) => {
-      //   ar = arr;
-      //   i = index;
-      // });
-      // if (dropPosition === -1) {
-      //   ar.splice(i, 0, dragObj);
-      // } else {
-      //   ar.splice(i + 1, 0, dragObj);
-      // }
+      dataList = [];
+      generateList(treeData);
+      console.log(">>>>>> DATA LIST AGAIN", dataList);
+
+      this.setState({
+        treeData: data,
+      });
     }
+    // else if (
+    //   (info.node.props.subcategories || []).length > 0 && // Has children
+    //   info.node.props.expanded && // Is expanded
+    //   dropPosition === 1 // On the bottom gap
+    // ) {
+    //   alert(">>>>>>>>>> In else if has childed");
+
+    //   // loop(data, dropKey, (item) => {
+    //   //   item.subcategories = item.subcategories || [];
+    //   //   // where to insert 示例添加到头部，可以是随意位置
+    //   //   item.subcategories.unshift(dragObj);
+    //   // });
+    // } else {
+    //   alert(">>>>>>>>>> In only else");
+
+    //   // let ar;
+    //   // let i;
+    //   // loop(data, dropKey, (item, index, arr) => {
+    //   //   ar = arr;
+    //   //   i = index;
+    //   // });
+    //   // if (dropPosition === -1) {
+    //   //   ar.splice(i, 0, dragObj);
+    //   // } else {
+    //   //   ar.splice(i + 1, 0, dragObj);
+    //   // }
+    // }
 
     console.log("^^^^^^^^^^ Tree Data after Drop : ", treeData);
 
-      dataList =[];
+    dataList = [];
     generateList(treeData);
     console.log(">>>>>> DATA LIST AGAIN", dataList);
 
@@ -814,9 +830,11 @@ class SearchTree extends React.Component {
       allParents.map((item) => {
         previousDefaultExpands.push(item);
       });
-      localStorage.setItem("defaultExpands", JSON.stringify(previousDefaultExpands));
-    }
-    else {
+      localStorage.setItem(
+        "defaultExpands",
+        JSON.stringify(previousDefaultExpands)
+      );
+    } else {
       let tempKeys = [];
       tempKeys.push(targetKey);
       allParents.map((item) => {
@@ -841,7 +859,10 @@ class SearchTree extends React.Component {
         previousDefaultExpands.pop(item);
       });
       console.log("****** WHAT ARE REMOVED EXPANDS :", previousDefaultExpands);
-      localStorage.setItem("defaultExpands", JSON.stringify(previousDefaultExpands));
+      localStorage.setItem(
+        "defaultExpands",
+        JSON.stringify(previousDefaultExpands)
+      );
     }
   }
 
@@ -871,16 +892,13 @@ class SearchTree extends React.Component {
     });
   }
 
-// componentWillUpdate(){
-//   dataList =[];
-//     generateList(treeData);
-//     console.log(">>>>>> DATA LIST AGAIN", dataList);
-// }
+  // componentWillUpdate(){
+  //   dataList =[];
+  //     generateList(treeData);
+  //     console.log(">>>>>> DATA LIST AGAIN", dataList);
+  // }
 
   render() {
-
-
-
     let allGreensString = localStorage.getItem("allGreens");
     let greens = [];
     if (allGreensString) {
@@ -908,11 +926,8 @@ class SearchTree extends React.Component {
     } = this.state;
     let expandedKeysClubbed = expandedKeys.concat(defaultExpands);
 
-
     const loop = (data) =>
       data.map((item) => {
-       
-
         const index = item.title.indexOf(searchValue);
         const beforeStr = item.title.substr(0, index);
         const afterStr = item.title.substr(index + searchValue.length);
@@ -932,7 +947,10 @@ class SearchTree extends React.Component {
               className={greens && greens.includes(item.key) ? "green" : ""}
             >
               {beforeStr}
-              <span className="site-tree-search-value">{searchValue} </span> {item.key}  {item.parentKey} 
+              <span className="site-tree-search-value">
+                {searchValue}{""}
+              </span>{""}
+             
               {afterStr}
               <span
                 id={item.key}
@@ -954,7 +972,9 @@ class SearchTree extends React.Component {
                 className={greens && greens.includes(item.key) ? "green" : ""}
               >
                 <span>
-          <span>{item.title} {item.key} {item.parentKey}</span>{" "}
+                  <span>
+                    {item.title}
+                  </span>{" "}
                 </span>
               </span>
               <span
@@ -980,14 +1000,14 @@ class SearchTree extends React.Component {
         ) {
           $("#" + item.key)
             .parentsUntil(".ant-tree-list-holder-inner")
-            .hide();
-          //  .css( "background-color", "red" );
-            //.css( "display", "none" );
+             .hide();
+            //.css("background-color", "red");
+          //.css( "display", "none" );
         } else {
           $("#" + item.key)
             .parentsUntil(".ant-tree-list-holder-inner")
-            .show();
-         //    .css( "background-color", "white" );
+              .show();
+            //.css("background-color", "white");
         }
 
         let multiFolder = [];
@@ -997,24 +1017,18 @@ class SearchTree extends React.Component {
           item.itemStoreAllDto &&
           item.itemStoreAllDto.length !== 0
         ) {
-      
           let childs = item.itemStoreAllDto;
-          childs =     childs.concat(item.subcategories);
+          childs = childs.concat(item.subcategories);
 
-          return (
-            {
-              title,
-              key: item.key,
-              parentKey: item.parentKey,
-              children: loop(childs),
-            }
-        
-            
-          );
+          return {
+            title,
+            key: item.key,
+            parentKey: item.parentKey,
+            children: loop(childs),
+          };
         }
 
         if (item.subcategories && item.subcategories.length !== 0) {
-       
           return {
             title,
             key: item.key,
@@ -1024,7 +1038,6 @@ class SearchTree extends React.Component {
         }
 
         if (item.itemStoreAllDto && item.itemStoreAllDto.length !== 0) {
-         
           return {
             title,
             key: item.key,
@@ -1033,20 +1046,17 @@ class SearchTree extends React.Component {
           };
         }
 
-
-
         return {
           title,
           key: item.key,
           parentKey: item.parentKey,
-          isLeaf: item.isLeaf
+          isLeaf: item.isLeaf,
         };
       });
     console.log("in last return");
 
     let expands = [...this.state.expandedKeys];
     let allExpands = expands.concat(defaultExpands);
-
 
     return (
       <div>
